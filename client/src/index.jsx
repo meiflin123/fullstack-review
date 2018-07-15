@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
+import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,12 +11,23 @@ class App extends React.Component {
     this.state = { 
       repos: []
     }
-
   }
 
+  getAllrepos() {
+   
+    axios.get('/repos')
+      .then(result => this.setState({ repos: result}))
+      .catch(err => console.log('error fetching repos:', err));
+  
+  }
   search (term) {
     console.log(`${term} was searched`);
     // TODO
+    console.log(term);
+    axios.post('/repos', term)
+      .then(result => this.getAllrepos())
+      .catch(err => console.log('error posting repos:', err));
+
   }
 
   render () {
